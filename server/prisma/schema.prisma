@@ -1,0 +1,257 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// ============== USER & ORGANIZATION ==============
+
+model User {
+  id              String   @id @default(cuid())
+  email           String   @unique
+  passwordHash    String
+  name            String
+  nameTh          String?
+  role            String   @default("NURSE") // ADMIN, NURSE, REVIEWER
+  departmentId    String?
+  department      Department? @relation(fields: [departmentId], references: [id])
+  experienceLevel String   @default("LEVEL_1") // LEVEL_1..5
+  active          Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  assessments     AssessmentSession[] @relation("NurseAssessments")
+  reviews         ReviewerScore[]     @relation("ReviewerScores")
+  scoreChanges    ScoreVersionHistory[] @relation("ScoreChangedBy")
+}
+
+model Department {
+  id        String   @id @default(cuid())
+  name      String
+  nameTh    String
+  code      String   @default("")
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  users          User[]
+  clinicalIssues DepartmentClinicalIssue[]
+  cases          Case[]
+}
+
+// ============== COMPETENCY RUBRIC ==============
+
+model CompetencyGroup {
+  id           String   @id @default(cuid())
+  nameTh       String
+  nameEn       String
+  type         String   // CORE, FUNCTIONAL, SPECIFIC, MANAGERIAL
+  assessedByAI Boolean  @default(true)
+  sortOrder    Int      @default(0)
+  active       Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  criteria CompetencyCriteria[]
+}
+
+model CompetencyCriteria {
+  id          String          @id @default(cuid())
+  groupId     String
+  group       CompetencyGroup @relation(fields: [groupId], references: [id])
+  nameTh      String
+  nameEn      String
+  description String?
+  sortOrder   Int             @default(0)
+  version     Int             @default(1)
+  active      Boolean         @default(true)
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  standardLevels StandardLevel[]
+  selfScores     SelfScore[]
+  finalScores    FinalScore[]
+  clinicalIssues DepartmentClinicalIssue[]
+}
+
+model StandardLevel {
+  id              String   @id @default(cuid())
+  experienceLevel String   // LEVEL_1..5
+  criteriaId      String
+  criteria        CompetencyCriteria @relation(fields: [criteriaId], references: [id])
+  standardScore   Int
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@unique([experienceLevel, criteriaId])
+}
+
+model DepartmentClinicalIssue {
+  id           String             @id @default(cuid())
+  departmentId String
+  department   Department         @relation(fields: [departmentId], references: [id])
+  criteriaId   String
+  criteria     CompetencyCriteria @relation(fields: [criteriaId], references: [id])
+  nameTh       String
+  nameEn       String
+  description  String?
+  active       Boolean            @default(true)
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @updatedAt
+}
+
+// ============== CASE BANK ==============
+
+model Case {
+  id                  String   @id @default(cuid())
+  title               String
+  titleTh             String?
+  descriptionTh       String
+  descriptionEn       String
+  reasoningIndicators String   @default("[]") // JSON string[]
+  linkedCriteriaIds   String   @default("[]") // JSON string[]
+  departmentId        String?
+  department          Department? @relation(fields: [departmentId], references: [id])
+  active              Boolean  @default(true)
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  sessions AssessmentSession[]
+}
+
+// ============== ASSESSMENT ==============
+
+model AssessmentSession {
+  id              String   @id @default(cuid())
+  nurseId         String
+  nurse           User     @relation("NurseAssessments", fields: [nurseId], references: [id])
+  caseId          String
+  case            Case     @relation(fields: [caseId], references: [id])
+  experienceLevel String
+  rubricVersion   Int      @default(1)
+  status          String   @default("IN_PROGRESS") // IN_PROGRESS, SELF_ASSESSED, AI_SCORED, AI_FAILED, REVIEWED, APPROVED
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  transcript     Transcript?
+  selfScores     SelfScore[]
+  aiScore        AIScore?
+  reviewerScore  ReviewerScore?
+  finalScores    FinalScore[]
+  versionHistory ScoreVersionHistory[]
+  report         Report?
+  idp            IndividualDevelopmentPlan?
+}
+
+model Transcript {
+  id            String            @id @default(cuid())
+  sessionId     String            @unique
+  session       AssessmentSession @relation(fields: [sessionId], references: [id])
+  inputType     String            // VOICE, TEXT
+  rawText       String
+  encryptedText String?
+  audioUrl      String?
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+}
+
+model SelfScore {
+  id         String             @id @default(cuid())
+  sessionId  String
+  session    AssessmentSession  @relation(fields: [sessionId], references: [id])
+  criteriaId String
+  criteria   CompetencyCriteria @relation(fields: [criteriaId], references: [id])
+  score      Int
+  createdAt  DateTime           @default(now())
+  updatedAt  DateTime           @updatedAt
+
+  @@unique([sessionId, criteriaId])
+}
+
+model AIScore {
+  id              String            @id @default(cuid())
+  sessionId       String            @unique
+  session         AssessmentSession @relation(fields: [sessionId], references: [id])
+  criteriaScores  String            @default("[]") // JSON [{criteriaId, score, reasoning}]
+  categoryScores  String?           // JSON [{groupId, averageScore}]
+  weightedTotal   Float?
+  strengths       String?
+  weaknesses      String?
+  recommendations String?
+  confidenceScore Float?
+  valid           Boolean           @default(true)
+  retryCount      Int               @default(0)
+  rawResponse     String?
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+}
+
+model ReviewerScore {
+  id             String            @id @default(cuid())
+  sessionId      String            @unique
+  session        AssessmentSession @relation(fields: [sessionId], references: [id])
+  reviewerId     String
+  reviewer       User              @relation("ReviewerScores", fields: [reviewerId], references: [id])
+  criteriaScores String            @default("[]") // JSON [{criteriaId, score}]
+  feedbackText   String?
+  approved       Boolean           @default(false)
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+}
+
+model FinalScore {
+  id         String             @id @default(cuid())
+  sessionId  String
+  session    AssessmentSession  @relation(fields: [sessionId], references: [id])
+  criteriaId String
+  criteria   CompetencyCriteria @relation(fields: [criteriaId], references: [id])
+  score      Int
+  gap        Int
+  source     String             // AI, REVIEWER
+  createdAt  DateTime           @default(now())
+  updatedAt  DateTime           @updatedAt
+
+  @@unique([sessionId, criteriaId])
+}
+
+model ScoreVersionHistory {
+  id             String            @id @default(cuid())
+  sessionId      String
+  session        AssessmentSession @relation(fields: [sessionId], references: [id])
+  changedById    String
+  changedBy      User              @relation("ScoreChangedBy", fields: [changedById], references: [id])
+  changeType     String
+  previousValues String?           // JSON
+  newValues      String            // JSON
+  createdAt      DateTime          @default(now())
+}
+
+model Report {
+  id          String            @id @default(cuid())
+  sessionId   String            @unique
+  session     AssessmentSession @relation(fields: [sessionId], references: [id])
+  pdfUrl      String?
+  pdfData     String?           // base64 encoded
+  generatedAt DateTime          @default(now())
+}
+
+// ============== INDIVIDUAL DEVELOPMENT PLAN (IDP) ==============
+// Matches the real-life "แผนพัฒนารายบุคคล" (IDP Nurse) form
+// from Mae Fah Luang University Medical Center Hospital
+
+model IndividualDevelopmentPlan {
+  id          String            @id @default(cuid())
+  sessionId   String            @unique
+  session     AssessmentSession @relation(fields: [sessionId], references: [id])
+  items       String            @default("[]") // JSON array of IDPItem[]
+  // Each item: { criteriaId, groupType, standardLevel, gap,
+  //   trainingCourse, shortTermTraining, inHouseTraining, coaching,
+  //   onTheJob, projectAssignment, selfLearning, otherMethod,
+  //   coordinator }
+  notes       String?           // Additional notes
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+}
