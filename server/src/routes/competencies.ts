@@ -48,7 +48,7 @@ router.get('/ai-assessed', async (_req: AuthRequest, res: Response): Promise<voi
 });
 
 // POST /api/competencies/groups - Create competency group (admin)
-router.post('/groups', requireRole('ADMIN'), async (req: AuthRequest, res: Response): Promise<void> => {
+router.post('/groups', requireRole('ADMIN'), async (req: AuthRequest & { body: any }, res: Response): Promise<void> => {
   try {
     const { nameTh, nameEn, type, assessedByAI, sortOrder } = req.body;
     const group = await prisma.competencyGroup.create({
@@ -62,7 +62,7 @@ router.post('/groups', requireRole('ADMIN'), async (req: AuthRequest, res: Respo
 });
 
 // POST /api/competencies/criteria - Create criteria (admin)
-router.post('/criteria', requireRole('ADMIN'), async (req: AuthRequest, res: Response): Promise<void> => {
+router.post('/criteria', requireRole('ADMIN'), async (req: AuthRequest & { body: any }, res: Response): Promise<void> => {
   try {
     const { groupId, nameTh, nameEn, description, sortOrder } = req.body;
     const criteria = await prisma.competencyCriteria.create({
@@ -76,7 +76,7 @@ router.post('/criteria', requireRole('ADMIN'), async (req: AuthRequest, res: Res
 });
 
 // PATCH /api/competencies/criteria/:id - Update criteria (admin)
-router.patch('/criteria/:id', requireRole('ADMIN'), async (req: AuthRequest, res: Response): Promise<void> => {
+router.patch('/criteria/:id', requireRole('ADMIN'), async (req: AuthRequest & { body: any }, res: Response): Promise<void> => {
   try {
     const { id } = req.params;
     const { nameTh, nameEn, description, sortOrder, active } = req.body;
@@ -99,7 +99,7 @@ router.patch('/criteria/:id', requireRole('ADMIN'), async (req: AuthRequest, res
 });
 
 // PUT /api/competencies/standards - Bulk update standard levels (admin)
-router.put('/standards', requireRole('ADMIN'), async (req: AuthRequest, res: Response): Promise<void> => {
+router.put('/standards', requireRole('ADMIN'), async (req: AuthRequest & { body: any }, res: Response): Promise<void> => {
   try {
     const { standards } = req.body; // [{experienceLevel, criteriaId, standardScore}]
     
