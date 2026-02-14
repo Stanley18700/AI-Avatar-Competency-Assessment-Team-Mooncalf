@@ -45,22 +45,22 @@ function AdminDashboard() {
   ];
 
   return (
-    <div className="page-shell space-y-8">
+    <div className="page-shell space-y-6 sm:space-y-8">
       {/* Welcome Header */}
       <div className="flex items-start justify-between">
         <div>
-          <h2 className="text-3xl font-bold text-surface-900 flex items-center gap-2 flex-wrap">
+          <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-surface-900 flex items-center gap-2 flex-wrap">
             {t.dashboard}
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-primary-50 text-primary-700 text-sm rounded-full font-semibold">
-              <Sparkles className="w-3.5 h-3.5" /> {t.admin}
+            <span className="inline-flex items-center gap-1.5 px-2 sm:px-3 py-0.5 sm:py-1 bg-primary-50 text-primary-700 text-xs sm:text-sm rounded-full font-semibold">
+              <Sparkles className="w-3 sm:w-3.5 h-3 sm:h-3.5" /> {t.admin}
             </span>
           </h2>
-          <p className="text-surface-600 text-base mt-2 leading-relaxed">ภาพรวมระบบประเมินสมรรถนะพยาบาล</p>
+          <p className="text-surface-600 text-sm sm:text-base mt-2 leading-relaxed">ภาพรวมระบบประเมินสมรรถนะพยาบาล</p>
         </div>
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4">
         {stats.map((s, idx) => (
           <div
             key={s.label}
@@ -68,13 +68,13 @@ function AdminDashboard() {
             style={{ animationDelay: `${idx * 100}ms` }}
           >
             <div className="relative z-10">
-              <div className="flex items-center justify-between mb-3">
-                <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center backdrop-blur-sm">
-                  <s.icon className="w-5 h-5 text-white" />
+              <div className="flex items-center justify-between mb-2 sm:mb-3">
+                <div className="w-8 sm:w-10 h-8 sm:h-10 rounded-xl bg-white/20 flex items-center justify-center backdrop-blur-sm">
+                  <s.icon className="w-4 sm:w-5 h-4 sm:h-5 text-white" />
                 </div>
               </div>
-              <p className="text-3xl font-bold text-white tabular-nums">{s.value}</p>
-              <p className="text-sm text-white/90 mt-1 font-medium leading-snug">{s.label}</p>
+              <p className="text-2xl sm:text-3xl font-bold text-white tabular-nums">{s.value}</p>
+              <p className="text-xs sm:text-sm text-white/90 mt-1 font-medium leading-snug">{s.label}</p>
             </div>
           </div>
         ))}
@@ -94,8 +94,8 @@ function AdminDashboard() {
 
       {/* Quick Links */}
       <div>
-        <h3 className="text-xl font-semibold text-surface-800 mb-4 tracking-tight">ลิงก์ด่วน</h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <h3 className="text-lg sm:text-xl font-semibold text-surface-800 mb-3 sm:mb-4 tracking-tight">ลิงก์ด่วน</h3>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
           {quickLinks.map((link, idx) => (
             <Link
               key={link.path}
@@ -135,18 +135,18 @@ function NurseDashboard() {
   const approved = sessions.filter(s => s.status === 'APPROVED').length;
 
   return (
-    <div className="page-shell space-y-8">
+    <div className="page-shell space-y-6 sm:space-y-8">
       {/* Welcome */}
       <div className="card-gradient bg-gradient-to-r from-primary-600 via-primary-500 to-accent-500 animate-fade-in-up">
         <div className="relative z-10">
-          <p className="text-primary-100/90 text-sm font-medium">สวัสดี 👋</p>
-          <h2 className="text-2xl font-bold text-white mt-1 leading-tight">{user?.nameTh || user?.name}</h2>
-          <p className="text-primary-100/80 text-sm mt-2 leading-relaxed">{experienceLevelLabels[user?.experienceLevel || 'LEVEL_1']} · {user?.department?.nameTh || ''}</p>
+          <p className="text-primary-100/90 text-xs sm:text-sm font-medium">สวัสดี 👋</p>
+          <h2 className="text-xl sm:text-2xl font-bold text-white mt-1 leading-tight">{user?.nameTh || user?.name}</h2>
+          <p className="text-primary-100/80 text-xs sm:text-sm mt-1 sm:mt-2 leading-relaxed">{experienceLevelLabels[user?.experienceLevel || 'LEVEL_1']} · {user?.department?.nameTh || ''}</p>
         </div>
       </div>
 
       {/* Stats Row */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
         <div className="card text-center animate-fade-in-up" style={{ animationDelay: '100ms' }}>
           <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary-500 to-primary-600 flex items-center justify-center mx-auto mb-3 shadow-glow-sm">
             <Activity className="w-6 h-6 text-white" />
@@ -207,16 +207,16 @@ function ReviewerDashboard() {
   }, []);
 
   return (
-    <div className="page-shell space-y-8">
+    <div className="page-shell space-y-6 sm:space-y-8">
       {/* Header */}
       <div>
-        <h2 className="text-3xl font-bold text-surface-900 flex items-center gap-2 flex-wrap">
+        <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-surface-900 flex items-center gap-2 flex-wrap">
           {t.dashboard}
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-purple-50 text-purple-700 text-sm rounded-full font-semibold">
+          <span className="inline-flex items-center gap-1.5 px-2 sm:px-3 py-0.5 sm:py-1 bg-purple-50 text-purple-700 text-xs sm:text-sm rounded-full font-semibold">
             {t.reviewer}
           </span>
         </h2>
-        <p className="text-surface-600 text-base mt-2 leading-relaxed">ตรวจสอบและอนุมัติผลการประเมิน</p>
+        <p className="text-surface-600 text-sm sm:text-base mt-2 leading-relaxed">ตรวจสอบและอนุมัติผลการประเมิน</p>
       </div>
 
       {/* Pending Reviews */}

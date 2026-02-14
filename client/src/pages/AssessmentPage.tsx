@@ -129,15 +129,17 @@ export default function AssessmentPage() {
   return (
     <div className="page-shell">
       {/* Header */}
-      <div className="flex items-center gap-3 mb-6">
-        <button onClick={() => navigate('/my-assessments')} className="p-1 hover:bg-surface-200 rounded">
+      <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6">
+        <button onClick={() => navigate('/my-assessments')} className="p-1 hover:bg-surface-200 rounded flex-shrink-0">
           <ArrowLeft className="w-5 h-5" />
         </button>
-        <div className="flex-1">
-          <h2 className="text-xl font-bold text-surface-900">{session.case?.titleTh || session.case?.title}</h2>
-          <p className="text-sm text-surface-500">
-            {experienceLevelLabels[session.experienceLevel]} · {formatDateTime(session.createdAt)}
-            <span className={`badge ${statusColors[session.status]} ml-2`}>{statusLabels[session.status]}</span>
+        <div className="flex-1 min-w-0">
+          <h2 className="text-lg sm:text-xl font-bold text-surface-900 truncate">{session.case?.titleTh || session.case?.title}</h2>
+          <p className="text-xs sm:text-sm text-surface-500 flex flex-wrap items-center gap-1 sm:gap-2">
+            <span>{experienceLevelLabels[session.experienceLevel]}</span>
+            <span>·</span>
+            <span className="hidden sm:inline">{formatDateTime(session.createdAt)}</span>
+            <span className={`badge ${statusColors[session.status]} text-xs`}>{statusLabels[session.status]}</span>
           </p>
         </div>
       </div>
@@ -145,29 +147,29 @@ export default function AssessmentPage() {
       {/* Step: Self Assessment */}
       {step === 'self-assess' && (
         <div className="card">
-          <h3 className="text-lg font-semibold mb-2">{t.selfAssessment}</h3>
-          <p className="text-sm text-surface-500 mb-4">ให้คะแนนตัวเอง 1-5 ในแต่ละสมรรถนะ (1=มือใหม่, 5=เชี่ยวชาญ)</p>
+          <h3 className="text-base sm:text-lg font-semibold mb-2">{t.selfAssessment}</h3>
+          <p className="text-xs sm:text-sm text-surface-500 mb-4">ให้คะแนนตัวเอง 1-5 ในแต่ละสมรรถนะ (1=มือใหม่, 5=เชี่ยวชาญ)</p>
 
           {allCompetencies.map(group => (
-            <div key={group.id} className="mb-6">
-              <h4 className="font-medium text-primary-700 mb-1">{group.nameTh}</h4>
+            <div key={group.id} className="mb-4 sm:mb-6">
+              <h4 className="font-medium text-primary-700 text-sm sm:text-base mb-1">{group.nameTh}</h4>
               {!group.assessedByAI && (
                 <p className="text-xs text-amber-600 mb-2">* ประเมินโดยตนเองและหัวหน้างาน (ไม่มีการประเมินจาก AI)</p>
               )}
               <div className="space-y-2">
                 {group.criteria.map(c => (
-                  <div key={c.id} className="flex items-center gap-4 p-3 bg-surface-100 rounded-lg border border-surface-200">
-                    <div className="flex-1">
+                  <div key={c.id} className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4 p-3 bg-surface-100 rounded-lg border border-surface-200">
+                    <div className="flex-1 min-w-0">
                       <p className="text-sm font-medium">{c.nameTh}</p>
-                      <p className="text-xs text-surface-400">{c.nameEn}</p>
+                      <p className="text-xs text-surface-400 truncate">{c.nameEn}</p>
                       <p className="text-xs text-surface-400">มาตรฐาน: {standardMap[c.id] || '-'}</p>
                     </div>
-                    <div className="flex gap-1">
+                    <div className="flex gap-1 flex-shrink-0 w-full sm:w-auto">
                       {[1, 2, 3, 4, 5].map(score => (
                         <button
                           key={score}
                           onClick={() => setSelfScores({ ...selfScores, [c.id]: score })}
-                          className={`w-10 h-10 rounded-lg text-sm font-bold transition-colors
+                          className={`flex-1 sm:flex-none w-auto sm:w-10 h-9 sm:h-10 rounded-lg text-sm font-bold transition-colors
                             ${selfScores[c.id] === score
                               ? 'bg-primary-600 text-white'
                               : 'bg-white border border-surface-300 hover:border-primary-400'}`}
@@ -192,22 +194,22 @@ export default function AssessmentPage() {
       {step === 'respond' && (
         <div className="space-y-4">
           {/* Mode toggle */}
-          <div className="flex items-center justify-center gap-2 text-sm">
+          <div className="flex items-center justify-center gap-0 text-xs sm:text-sm overflow-hidden rounded-lg">
             <button
               onClick={() => setUseVoiceMode(true)}
-              className={`px-4 py-2 rounded-l-lg font-medium transition-colors ${
+              className={`flex-1 px-3 sm:px-4 py-2 font-medium transition-colors ${
                 useVoiceMode ? 'bg-indigo-600 text-white' : 'bg-surface-100 text-surface-700 hover:bg-surface-200'
               }`}
             >
-              <span>🎙 สนทนาด้วยเสียง (Voice Chat)</span>
+              <span className="truncate">🎙 สนทนาด้วยเสียง</span>
             </button>
             <button
               onClick={() => setUseVoiceMode(false)}
-              className={`px-4 py-2 rounded-r-lg font-medium transition-colors ${
+              className={`flex-1 px-3 sm:px-4 py-2 font-medium transition-colors ${
                 !useVoiceMode ? 'bg-indigo-600 text-white' : 'bg-surface-100 text-surface-700 hover:bg-surface-200'
               }`}
             >
-              <span>⌨️ พิมพ์คำตอบ (Text)</span>
+              <span className="truncate">⌨️ พิมพ์คำตอบ</span>
             </button>
           </div>
 
@@ -306,10 +308,13 @@ export default function AssessmentPage() {
 
           {/* Score Table - Matching Nurse Assessment Form (ใบประเมินสมรรถนะพยาบาล) */}
           {(session.aiScore || session.finalScores?.length) && (
-            <div className="card overflow-x-auto">
-              <h3 className="text-lg font-semibold mb-1">{t.evaluationResults}</h3>
+            <div className="card">
+              <h3 className="text-base sm:text-lg font-semibold mb-1">{t.evaluationResults}</h3>
               <p className="text-xs text-surface-500 mb-4">ผลการประเมินสมรรถนะ ตามเกณฑ์สภาการพยาบาล</p>
-              <table className="w-full text-sm">
+              <div className="overflow-x-auto -mx-4 sm:mx-0">
+                <div className="inline-block min-w-full align-middle">
+                  <div className="overflow-hidden">
+                    <table className="min-w-full text-xs sm:text-sm">
                 <thead>
                   <tr className="border-b text-left bg-surface-100">
                     <th className="py-2 px-2">สมรรถนะ</th>
@@ -378,7 +383,10 @@ export default function AssessmentPage() {
                     return rows;
                   })}
                 </tbody>
-              </table>
+                    </table>
+                  </div>
+                </div>
+              </div>
 
               {/* Weighted Total */}
               {session.aiScore?.weightedTotal && (
@@ -395,18 +403,18 @@ export default function AssessmentPage() {
 
           {/* Feedback */}
           {session.aiScore && session.aiScore.valid && (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
               <div className="card border-l-4 border-green-400">
-                <h4 className="font-semibold text-green-700 mb-2">{t.strengths}</h4>
-                <p className="text-sm whitespace-pre-wrap">{session.aiScore.strengths || '-'}</p>
+                <h4 className="font-semibold text-green-700 text-sm sm:text-base mb-2">{t.strengths}</h4>
+                <p className="text-xs sm:text-sm whitespace-pre-wrap">{session.aiScore.strengths || '-'}</p>
               </div>
               <div className="card border-l-4 border-red-400">
-                <h4 className="font-semibold text-red-700 mb-2">{t.weaknesses}</h4>
-                <p className="text-sm whitespace-pre-wrap">{session.aiScore.weaknesses || '-'}</p>
+                <h4 className="font-semibold text-red-700 text-sm sm:text-base mb-2">{t.weaknesses}</h4>
+                <p className="text-xs sm:text-sm whitespace-pre-wrap">{session.aiScore.weaknesses || '-'}</p>
               </div>
               <div className="card border-l-4 border-blue-400">
-                <h4 className="font-semibold text-blue-700 mb-2">{t.recommendations}</h4>
-                <p className="text-sm whitespace-pre-wrap">{session.aiScore.recommendations || '-'}</p>
+                <h4 className="font-semibold text-blue-700 text-sm sm:text-base mb-2">{t.recommendations}</h4>
+                <p className="text-xs sm:text-sm whitespace-pre-wrap">{session.aiScore.recommendations || '-'}</p>
               </div>
             </div>
           )}

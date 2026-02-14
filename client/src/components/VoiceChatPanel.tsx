@@ -181,18 +181,19 @@ export default function VoiceChatPanel({ sessionId, onConversationComplete, disa
   return (
     <div className="card overflow-hidden !p-0">
       {/* Header */}
-      <div className="relative overflow-hidden px-5 py-4 bg-gradient-to-r from-primary-600 via-primary-500 to-accent-500">
+      <div className="relative overflow-hidden px-3 sm:px-5 py-3 sm:py-4 bg-gradient-to-r from-primary-600 via-primary-500 to-accent-500">
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-0 right-0 w-32 h-32 bg-white rounded-full blur-3xl" />
         </div>
         <div className="relative flex items-center justify-between">
-          <h3 className="text-white font-bold flex items-center gap-2 text-base">
-            <Sparkles className="w-5 h-5 text-accent-200" />
-            AI Avatar — สนทนาประเมินสมรรถนะ
+          <h3 className="text-white font-bold flex items-center gap-2 text-sm sm:text-base">
+            <Sparkles className="w-4 sm:w-5 h-4 sm:h-5 text-accent-200" />
+            <span className="hidden sm:inline">AI Avatar — สนทนาประเมินสมรรถนะ</span>
+            <span className="sm:hidden">AI Avatar</span>
           </h3>
           <button
             onClick={toggleMute}
-            className="p-2 rounded-xl bg-white/10 hover:bg-white/20 text-white transition-all backdrop-blur-sm"
+            className="p-1.5 sm:p-2 rounded-xl bg-white/10 hover:bg-white/20 text-white transition-all backdrop-blur-sm"
             title={isMuted ? 'เปิดเสียง' : 'ปิดเสียง'}
           >
             {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
@@ -200,40 +201,40 @@ export default function VoiceChatPanel({ sessionId, onConversationComplete, disa
         </div>
       </div>
 
-      <div className="p-5">
+      <div className="p-3 sm:p-5">
         {/* Avatar */}
-        <div className="flex justify-center py-3">
-          <AIAvatar state={avatarState} size={160} />
+        <div className="flex justify-center py-2 sm:py-3">
+          <AIAvatar state={avatarState} size={120} className="sm:w-40 sm:h-40" />
         </div>
 
         {/* Not started */}
         {!started && (
-          <div className="text-center py-6 animate-fade-in-up">
-            <p className="text-surface-600 mb-2 font-medium">
+          <div className="text-center py-4 sm:py-6 animate-fade-in-up">
+            <p className="text-surface-600 mb-2 font-medium text-sm sm:text-base px-2">
               AI Avatar จะสนทนากับคุณเพื่อประเมินสมรรถนะทางการพยาบาล
             </p>
-            <p className="text-sm text-surface-400 mb-5">
+            <p className="text-xs sm:text-sm text-surface-400 mb-4 sm:mb-5 px-2">
               ระบบจะถาม 3-4 คำถามเกี่ยวกับกรณีศึกษา แล้วประเมินจากคำตอบของคุณ
             </p>
 
             {/* Tips */}
-            <div className="mb-6 p-4 bg-primary-50 text-primary-700 text-sm rounded-2xl text-left inline-block border border-primary-100">
-              <p className="font-semibold mb-2 flex items-center gap-1.5">
-                <Sparkles className="w-4 h-4 text-primary-500" />
+            <div className="mb-4 sm:mb-6 p-3 sm:p-4 bg-primary-50 text-primary-700 text-xs sm:text-sm rounded-2xl text-left mx-auto max-w-md border border-primary-100">
+              <p className="font-semibold mb-1.5 sm:mb-2 flex items-center gap-1.5">
+                <Sparkles className="w-3 sm:w-4 h-3 sm:h-4 text-primary-500" />
                 คำแนะนำ
               </p>
-              <ul className="space-y-1.5 text-primary-600/80">
-                <li className="flex items-start gap-2">
-                  <span className="mt-0.5 w-1 h-1 rounded-full bg-primary-400 flex-shrink-0" />
-                  ควรใช้ <strong>Google Chrome</strong> หรือ <strong>Microsoft Edge</strong> บน PC
+              <ul className="space-y-1 sm:space-y-1.5 text-primary-600/80">
+                <li className="flex items-start gap-1.5 sm:gap-2">
+                  <span className="mt-0.5 sm:mt-1 w-1 h-1 rounded-full bg-primary-400 flex-shrink-0" />
+                  <span className="leading-snug">ควรใช้ <strong>Google Chrome</strong> หรือ <strong>Microsoft Edge</strong></span>
                 </li>
-                <li className="flex items-start gap-2">
-                  <span className="mt-0.5 w-1 h-1 rounded-full bg-primary-400 flex-shrink-0" />
-                  กรุณาใช้ <strong>ไมโครโฟน/หูฟัง</strong> ในสภาพแวดล้อมที่เงียบ
+                <li className="flex items-start gap-1.5 sm:gap-2">
+                  <span className="mt-0.5 sm:mt-1 w-1 h-1 rounded-full bg-primary-400 flex-shrink-0" />
+                  <span className="leading-snug">กรุณาใช้ <strong>ไมโครโฟน/หูฟัง</strong> ในสภาพแวดล้อมที่เงียบ</span>
                 </li>
-                <li className="flex items-start gap-2">
-                  <span className="mt-0.5 w-1 h-1 rounded-full bg-primary-400 flex-shrink-0" />
-                  พูดภาษาไทยด้วยน้ำเสียงปกติ ชัดเจน
+                <li className="flex items-start gap-1.5 sm:gap-2">
+                  <span className="mt-0.5 sm:mt-1 w-1 h-1 rounded-full bg-primary-400 flex-shrink-0" />
+                  <span className="leading-snug">พูดภาษาไทยด้วยน้ำเสียงปกติ ชัดเจน</span>
                 </li>
               </ul>
             </div>
@@ -241,11 +242,12 @@ export default function VoiceChatPanel({ sessionId, onConversationComplete, disa
             <button
               onClick={handleStart}
               disabled={disabled}
-              className="btn-primary text-lg px-8 py-3.5 shadow-glow hover:shadow-glow-lg transition-all"
+              className="btn-primary text-base sm:text-lg px-6 sm:px-8 py-3 sm:py-3.5 shadow-glow hover:shadow-glow-lg transition-all"
             >
               <span className="flex items-center gap-2">
-                <Mic className="w-5 h-5" />
-                เริ่มสนทนากับ AI Avatar
+                <Mic className="w-4 sm:w-5 h-4 sm:h-5" />
+                <span className="hidden sm:inline">เริ่มสนทนากับ AI Avatar</span>
+                <span className="sm:hidden">เริ่มสนทนา</span>
               </span>
             </button>
           </div>
@@ -254,7 +256,7 @@ export default function VoiceChatPanel({ sessionId, onConversationComplete, disa
         {/* Conversation */}
         {started && (
           <>
-            <div className="h-80 overflow-y-auto px-1 py-2 space-y-3 mt-2">
+            <div className="h-64 sm:h-80 overflow-y-auto px-1 py-2 space-y-2 sm:space-y-3 mt-2">
               {history.map((msg, idx) => (
                 <div
                   key={idx}
@@ -262,12 +264,12 @@ export default function VoiceChatPanel({ sessionId, onConversationComplete, disa
                   style={{ animationDelay: '50ms' }}
                 >
                   <div
-                    className={`max-w-[80%] min-w-0 rounded-2xl px-4 py-3 text-sm leading-relaxed shadow-sm ${msg.role === 'ai'
+                    className={`max-w-[85%] sm:max-w-[80%] min-w-0 rounded-2xl px-3 sm:px-4 py-2.5 sm:py-3 text-xs sm:text-sm leading-relaxed shadow-sm ${msg.role === 'ai'
                       ? 'bg-surface-50 border border-surface-100 text-surface-800 rounded-bl-md'
                       : 'bg-gradient-to-r from-primary-600 to-primary-500 text-white rounded-br-md shadow-glow-sm'
                       }`}
                   >
-                    <p className="text-[10px] font-semibold mb-1 opacity-50 uppercase tracking-wider">
+                    <p className="text-[9px] sm:text-[10px] font-semibold mb-1 opacity-50 uppercase tracking-wider">
                       {msg.role === 'ai' ? '🤖 AI Avatar' : '👩‍⚕️ คุณ'}
                     </p>
                     <p className="whitespace-pre-wrap break-words">{msg.text}</p>
@@ -301,7 +303,7 @@ export default function VoiceChatPanel({ sessionId, onConversationComplete, disa
 
             {/* Controls */}
             {!isComplete && (
-              <div className="mt-4 space-y-3">
+              <div className="mt-3 sm:mt-4 space-y-2 sm:space-y-3">
                 {/* Voice control button */}
                 <div className="flex items-center justify-center">
                   {!isLoading && (
@@ -319,7 +321,7 @@ export default function VoiceChatPanel({ sessionId, onConversationComplete, disa
                         startListening();
                       }}
                       className={`
-                        flex items-center gap-2 px-8 py-3.5 text-white rounded-2xl font-semibold transition-all duration-300
+                        flex items-center gap-2 px-6 sm:px-8 py-3 sm:py-3.5 text-white rounded-2xl font-semibold transition-all duration-300 text-sm sm:text-base
                         ${voiceState === 'listening'
                           ? 'bg-gradient-to-r from-red-500 to-red-600 shadow-lg shadow-red-500/25 animate-pulse scale-105'
                           : voiceState === 'speaking'
@@ -329,14 +331,15 @@ export default function VoiceChatPanel({ sessionId, onConversationComplete, disa
                     >
                       {voiceState === 'listening' ? (
                         <>
-                          <div className="w-3 h-3 bg-white rounded-sm" />
-                          <span>หยุดพูด & ส่งคำตอบ</span>
+                          <div className="w-2 sm:w-3 h-2 sm:h-3 bg-white rounded-sm" />
+                          <span className="hidden sm:inline">หยุดพูด & ส่งคำตอบ</span>
+                          <span className="sm:hidden">หยุดพูด</span>
                         </>
                       ) : voiceState === 'speaking' ? (
                         <span>⏭️ ข้ามเสียงพูด</span>
                       ) : (
                         <>
-                          <Mic className="w-5 h-5" />
+                          <Mic className="w-4 sm:w-5 h-4 sm:h-5" />
                           <span>กดเพื่อพูด</span>
                         </>
                       )}
@@ -348,7 +351,7 @@ export default function VoiceChatPanel({ sessionId, onConversationComplete, disa
                 <div className="flex gap-2">
                   <input
                     type="text"
-                    className="input-field flex-1 text-sm !rounded-xl"
+                    className="input-field flex-1 text-xs sm:text-sm !rounded-xl"
                     placeholder="หรือพิมพ์คำตอบที่นี่..."
                     value={manualText}
                     onChange={e => setManualText(e.target.value)}
@@ -358,7 +361,7 @@ export default function VoiceChatPanel({ sessionId, onConversationComplete, disa
                   <button
                     onClick={handleManualSubmit}
                     disabled={!manualText.trim() || isLoading || voiceState === 'speaking'}
-                    className="btn-primary !px-4 !rounded-xl"
+                    className="btn-primary !px-3 sm:!px-4 !rounded-xl"
                   >
                     <Send className="w-4 h-4" />
                   </button>
@@ -368,7 +371,7 @@ export default function VoiceChatPanel({ sessionId, onConversationComplete, disa
                   <button
                     onClick={handleCompleteAndAssess}
                     disabled={isLoading || history.filter((item) => item.role === 'nurse' && item.text.trim()).length === 0}
-                    className="btn-secondary text-sm"
+                    className="btn-secondary text-xs sm:text-sm"
                   >
                     จบการสนทนาและประเมินผล
                   </button>

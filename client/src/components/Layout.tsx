@@ -27,7 +27,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     <div className="h-screen flex bg-mesh overflow-hidden">
       {/* Sidebar */}
       <aside className={`
-        fixed inset-y-0 left-0 z-50 w-72 transform transition-all duration-300 ease-out
+        fixed inset-y-0 left-0 z-50 w-64 sm:w-72 transform transition-all duration-300 ease-out
         lg:relative lg:translate-x-0 lg:h-screen lg:flex-shrink-0
         ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
       `}>
@@ -115,19 +115,20 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       {/* Main Content */}
       <div className="flex-1 flex flex-col min-w-0 h-screen">
         {/* Top Bar */}
-        <header className="sticky top-0 z-30 bg-transparent border-0 px-4 py-3 flex items-center justify-between lg:px-6">
+        <header className="sticky top-0 z-30 bg-white/80 backdrop-blur-sm border-b border-surface-100 px-3 py-2 flex items-center justify-between sm:px-4 sm:py-3 lg:px-6 lg:bg-transparent lg:border-0">
           <button
             className="lg:hidden p-1.5 rounded-lg hover:bg-surface-100 transition-colors"
             onClick={() => setSidebarOpen(!sidebarOpen)}
           >
             {sidebarOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
+          <div className="flex-1 lg:flex-none"></div>
           <LanguageSelector />
         </header>
 
         {/* Page Content */}
-        <main className="flex-1 p-4 lg:p-6 overflow-auto content-pane">
-          <div className="animate-fade-in-up">
+        <main className="flex-1 p-3 sm:p-4 lg:p-6 overflow-auto content-pane">
+          <div className="animate-fade-in-up max-w-7xl mx-auto">
             {children}
           </div>
         </main>

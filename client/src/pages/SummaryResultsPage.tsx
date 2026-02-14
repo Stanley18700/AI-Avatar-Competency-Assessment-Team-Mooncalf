@@ -76,23 +76,23 @@ export default function SummaryResultsPage() {
   return (
     <div className="page-shell">
       {/* Header */}
-      <div className="flex items-center justify-between mb-6">
-        <div>
-          <h2 className="text-xl font-bold text-surface-900 flex items-center gap-2">
-            <FileText className="w-6 h-6 text-primary-600" />
-            สรุปผลการประเมินสมรรถนะ (Summary of Results)
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-0 mb-4 sm:mb-6">
+        <div className="flex-1 min-w-0">
+          <h2 className="text-lg sm:text-xl font-bold text-surface-900 flex items-center gap-2">
+            <FileText className="w-5 sm:w-6 h-5 sm:h-6 text-primary-600" />
+            <span className="truncate">สรุปผลการประเมินสมรรถนะ</span>
           </h2>
-          <p className="text-sm text-surface-500">
+          <p className="text-xs sm:text-sm text-surface-500 mt-1">
             โรงพยาบาลศูนย์การแพทย์มหาวิทยาลัยแม่ฟ้าหลวง · {t.hospital}
           </p>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto">
           <select
-            className="input-field text-sm py-1.5 px-3"
+            className="input-field text-xs sm:text-sm py-1.5 px-2 sm:px-3 flex-1 sm:flex-none"
             value={selectedDept}
             onChange={e => setSelectedDept(e.target.value)}
           >
-            <option value="">ทุกแผนก (All Departments)</option>
+            <option value="">ทุกแผนก</option>
             {departments.map((d: any) => (
               <option key={d.id} value={d.id}>{d.nameTh}</option>
             ))}
@@ -101,7 +101,10 @@ export default function SummaryResultsPage() {
       </div>
 
       {/* Matrix Table (matching real Summary of Results sheet) */}
-      <div className="card overflow-x-auto">
+      <div className="card">
+        <div className="overflow-x-auto -mx-4 sm:mx-0">
+          <div className="inline-block min-w-full align-middle">
+            <div className="overflow-hidden">
         <table className="text-xs border-collapse w-full">
           <thead>
             {/* Row 1: Group headers spanning criteria */}
@@ -185,7 +188,10 @@ export default function SummaryResultsPage() {
             })}
           </tbody>
         </table>
-      </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
       {/* Legend */}
       <div className="card mt-4">

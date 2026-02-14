@@ -35,7 +35,7 @@ export default function LoginPage() {
   ];
 
   return (
-    <div className="min-h-screen relative overflow-hidden flex items-center justify-center p-4">
+    <div className="min-h-screen relative overflow-hidden flex items-center justify-center p-3 sm:p-4">
       {/* Animated Gradient Background */}
       <div className="absolute inset-0 bg-gradient-to-br from-primary-950 via-primary-900 to-accent-900 bg-gradient-animated" />
 
@@ -51,34 +51,34 @@ export default function LoginPage() {
       }} />
 
       {/* Login Card */}
-      <div className="relative z-10 w-full max-w-md animate-fade-in-up rounded-3xl bg-primary-900/95 backdrop-blur-xl border border-white/10 shadow-2xl p-8">
+      <div className="relative z-10 w-full max-w-md animate-fade-in-up rounded-2xl sm:rounded-3xl bg-primary-900/95 backdrop-blur-xl border border-white/10 shadow-2xl p-6 sm:p-8">
         {/* Header */}
-        <div className="text-center mb-8">
-          <div className="relative inline-flex items-center justify-center mb-5">
-            <div className="absolute w-20 h-20 bg-primary-500/20 rounded-2xl blur-xl animate-pulse" />
-            <div className="relative w-16 h-16 rounded-2xl bg-gradient-to-br from-primary-400 via-primary-500 to-accent-500 flex items-center justify-center shadow-glow">
-              <Brain className="w-8 h-8 text-white" />
+        <div className="text-center mb-6 sm:mb-8">
+          <div className="relative inline-flex items-center justify-center mb-4 sm:mb-5">
+            <div className="absolute w-16 sm:w-20 h-16 sm:h-20 bg-primary-500/20 rounded-2xl blur-xl animate-pulse" />
+            <div className="relative w-12 sm:w-16 h-12 sm:h-16 rounded-2xl bg-gradient-to-br from-primary-400 via-primary-500 to-accent-500 flex items-center justify-center shadow-glow">
+              <Brain className="w-6 sm:w-8 h-6 sm:h-8 text-white" />
             </div>
-            <Sparkles className="absolute -top-1 -right-1 w-5 h-5 text-accent-400 animate-pulse" />
+            <Sparkles className="absolute -top-1 -right-1 w-4 sm:w-5 h-4 sm:h-5 text-accent-400 animate-pulse" />
           </div>
-          <h1 className="text-2xl font-bold text-white tracking-tight">{t.appName}</h1>
-          <p className="text-sm text-primary-100 mt-2 font-medium leading-relaxed">{t.appSubtitle}</p>
-          <p className="text-sm text-white/80 mt-1.5 leading-snug">{t.hospital}</p>
+          <h1 className="text-xl sm:text-2xl font-bold text-white tracking-tight">{t.appName}</h1>
+          <p className="text-xs sm:text-sm text-primary-100 mt-1.5 sm:mt-2 font-medium leading-relaxed">{t.appSubtitle}</p>
+          <p className="text-xs sm:text-sm text-white/80 mt-1 sm:mt-1.5 leading-snug">{t.hospital}</p>
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
           {error && (
-            <div className="bg-red-500/10 border border-red-500/20 text-red-300 px-4 py-3 rounded-xl text-sm animate-scale-in backdrop-blur-sm">
+            <div className="bg-red-500/10 border border-red-500/20 text-red-300 px-3 sm:px-4 py-2.5 sm:py-3 rounded-xl text-xs sm:text-sm animate-scale-in backdrop-blur-sm">
               {error}
             </div>
           )}
 
           <div>
-            <label className="block text-sm font-semibold text-white/95 mb-1.5">{t.email}</label>
+            <label className="block text-xs sm:text-sm font-semibold text-white/95 mb-1 sm:mb-1.5">{t.email}</label>
             <input
               type="email"
-              className="w-full px-4 py-3 bg-white/[0.08] border border-white/20 rounded-xl text-white placeholder:text-white/50 
+              className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm bg-white/[0.08] border border-white/20 rounded-xl text-white placeholder:text-white/50 
                            focus:ring-2 focus:ring-primary-400/40 focus:border-primary-400/60 focus:bg-white/[0.1]
                            outline-none transition-all duration-200"
               value={email}
@@ -89,10 +89,10 @@ export default function LoginPage() {
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-white/95 mb-1.5">{t.password}</label>
+            <label className="block text-xs sm:text-sm font-semibold text-white/95 mb-1 sm:mb-1.5">{t.password}</label>
             <input
               type="password"
-              className="w-full px-4 py-3 bg-white/[0.08] border border-white/20 rounded-xl text-white placeholder:text-white/50 
+              className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm bg-white/[0.08] border border-white/20 rounded-xl text-white placeholder:text-white/50 
                            focus:ring-2 focus:ring-primary-400/40 focus:border-primary-400/60 focus:bg-white/[0.1]
                            outline-none transition-all duration-200"
               value={password}
@@ -105,7 +105,7 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 rounded-xl font-semibold text-white transition-all duration-300
+            className="w-full py-2.5 sm:py-3 rounded-xl font-semibold text-white text-sm sm:text-base transition-all duration-300
                          bg-gradient-to-r from-primary-500 to-accent-500 
                          hover:from-primary-400 hover:to-accent-400 hover:shadow-glow
                          active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
@@ -122,11 +122,11 @@ export default function LoginPage() {
         </form>
 
         {/* Demo Credentials */}
-        <div className="mt-6 pt-5 border-t border-white/20">
-          <p className="text-xs text-white/90 text-center mb-3 uppercase tracking-wider font-semibold">
+        <div className="mt-5 sm:mt-6 pt-4 sm:pt-5 border-t border-white/20">
+          <p className="text-[10px] sm:text-xs text-white/90 text-center mb-2 sm:mb-3 uppercase tracking-wider font-semibold">
             Demo Accounts
           </p>
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-2 gap-1.5 sm:gap-2">
             {demoAccounts.map((demo) => (
               <button
                 key={demo.email}
