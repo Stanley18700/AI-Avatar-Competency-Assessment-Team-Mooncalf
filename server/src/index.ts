@@ -12,6 +12,7 @@ import reportRoutes from './routes/reports';
 import analyticsRoutes from './routes/analytics';
 import idpRoutes from './routes/idp';
 import audioRoutes from './routes/audio';
+import prisma from './lib/prisma';
 import { errorHandler } from './middleware/errorHandler';
 import { requestLogger } from './middleware/logger';
 
@@ -62,12 +63,60 @@ app.get('/api/health', (_req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
+app.get('/health/dependencies', async (_req, res) => {
+  const checks = {
+    database: false,
+    geminiConfigured: Boolean(process.env.GEMINI_API_KEY),
+    jwtConfigured: Boolean(process.env.JWT_SECRET),
+    encryptionConfigured: Boolean(process.env.ENCRYPTION_KEY && process.env.ENCRYPTION_IV),
+  };
+
+  try {
+    await prisma.$queryRawUnsafe('SELECT 1');
+    checks.database = true;
+  } catch (error) {
+    console.error('Database health check failed:', error);
+  }
+
+  const ok = checks.database && checks.geminiConfigured && checks.jwtConfigured && checks.encryptionConfigured;
+  res.status(ok ? 200 : 503).json({
+    status: ok ? 'ok' : 'degraded',
+    timestamp: new Date().toISOString(),
+    checks,
+  });
+});
+
+app.get('/api/health/dependencies', async (_req, res) => {
+  const checks = {
+    database: false,
+    geminiConfigured: Boolean(process.env.GEMINI_API_KEY),
+    jwtConfigured: Boolean(process.env.JWT_SECRET),
+    encryptionConfigured: Boolean(process.env.ENCRYPTION_KEY && process.env.ENCRYPTION_IV),
+  };
+
+  try {
+    await prisma.$queryRawUnsafe('SELECT 1');
+    checks.database = true;
+  } catch (error) {
+    console.error('Database health check failed:', error);
+  }
+
+  const ok = checks.database && checks.geminiConfigured && checks.jwtConfigured && checks.encryptionConfigured;
+  res.status(ok ? 200 : 503).json({
+    status: ok ? 'ok' : 'degraded',
+    timestamp: new Date().toISOString(),
+    checks,
+  });
+});
+
 app.get('/', (_req, res) => {
   res.json({
     service: 'NurseMind AI API',
     status: 'running',
     health: '/health',
     apiHealth: '/api/health',
+    dependencyHealth: '/health/dependencies',
+    apiDependencyHealth: '/api/health/dependencies',
   });
 });
 

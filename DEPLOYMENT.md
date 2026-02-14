@@ -23,6 +23,9 @@ This project deploys best as:
    - `https://<your-render-service>.onrender.com/health`
    - Also works: `https://<your-render-service>.onrender.com/api/health`
    - Important: replace `<your-render-service>` with your real Render service name.
+5. Confirm dependency health:
+   - `https://<your-render-service>.onrender.com/health/dependencies`
+   - Should return `status: "ok"` and all checks as `true`.
 
 ### Option B: Manual Render service
 - Root Directory: `server`
@@ -63,6 +66,7 @@ This project deploys best as:
 - Open frontend and log in.
 - Confirm API calls succeed (no CORS errors).
 - Confirm `/health` is healthy.
+- Confirm `/health/dependencies` is healthy (`database`, `geminiConfigured`, `jwtConfigured`, `encryptionConfigured` are all `true`).
 - Run one assessment flow end-to-end.
 
 ## 5) Notes
