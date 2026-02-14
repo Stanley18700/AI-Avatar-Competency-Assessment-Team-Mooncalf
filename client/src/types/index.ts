@@ -165,10 +165,15 @@ export interface ScoreVersionHistory {
 
 export interface AnalyticsSummary {
   totalAssessments: number;
+  aiScoredAssessments: number;
   completedAssessments: number;
+  aiFailedAssessments: number;
   approvedAssessments: number;
   totalNurses: number;
   totalCases: number;
+  totalVoiceAssessments: number;
+  avgAIWeightedTotal: number;
+  avgAIConfidence: number;
 }
 
 export interface CompetencyByCategory {

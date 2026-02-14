@@ -10,8 +10,14 @@ router.use(requireRole('ADMIN'));
 router.get('/summary', async (_req: AuthRequest, res: Response): Promise<void> => {
   try {
     const totalAssessments = await prisma.assessmentSession.count();
+    const aiScoredAssessments = await prisma.assessmentSession.count({
+      where: { status: { in: ['AI_SCORED', 'REVIEWED', 'APPROVED'] } }
+    });
     const completedAssessments = await prisma.assessmentSession.count({
       where: { status: { in: ['AI_SCORED', 'REVIEWED', 'APPROVED'] } }
+    });
+    const aiFailedAssessments = await prisma.assessmentSession.count({
+      where: { status: 'AI_FAILED' }
     });
     const approvedAssessments = await prisma.assessmentSession.count({
       where: { status: 'APPROVED' }
@@ -19,12 +25,44 @@ router.get('/summary', async (_req: AuthRequest, res: Response): Promise<void> =
     const totalNurses = await prisma.user.count({ where: { role: 'NURSE', active: true } });
     const totalCases = await prisma.case.count({ where: { active: true } });
 
+    const validAIScores = await prisma.aIScore.findMany({
+      where: {
+        valid: true,
+        weightedTotal: { not: null }
+      },
+      select: {
+        weightedTotal: true,
+        confidenceScore: true,
+      }
+    });
+
+    const totalVoiceAssessments = await prisma.transcript.count({
+      where: { inputType: 'VOICE' }
+    });
+
+    const avgAIWeightedTotal = validAIScores.length > 0
+      ? Number((validAIScores.reduce((sum, item) => sum + (item.weightedTotal || 0), 0) / validAIScores.length).toFixed(2))
+      : 0;
+
+    const confidenceValues = validAIScores
+      .map(item => item.confidenceScore)
+      .filter((value): value is number => typeof value === 'number');
+
+    const avgAIConfidence = confidenceValues.length > 0
+      ? Number((confidenceValues.reduce((sum, value) => sum + value, 0) / confidenceValues.length).toFixed(2))
+      : 0;
+
     res.json({
       totalAssessments,
+      aiScoredAssessments,
       completedAssessments,
+      aiFailedAssessments,
       approvedAssessments,
       totalNurses,
-      totalCases
+      totalCases,
+      totalVoiceAssessments,
+      avgAIWeightedTotal,
+      avgAIConfidence
     });
   } catch (error) {
     console.error('Get summary error:', error);

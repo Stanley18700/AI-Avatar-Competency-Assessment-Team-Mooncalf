@@ -8,7 +8,7 @@ import { AnalyticsSummary, AssessmentSession } from '../types';
 import { Link } from 'react-router-dom';
 import {
   ClipboardCheck, Users, FileText, CheckCircle, TrendingUp,
-  ArrowRight, Stethoscope, Sparkles, BarChart3, Activity
+  ArrowRight, Stethoscope, Sparkles, BarChart3, Activity, Mic, AlertTriangle
 } from 'lucide-react';
 
 export default function DashboardPage() {
@@ -32,6 +32,10 @@ function AdminDashboard() {
     { label: t.completedAssessments, value: summary.completedAssessments, icon: TrendingUp, gradient: 'from-amber-500 to-orange-500' },
     { label: t.approvedAssessments, value: summary.approvedAssessments, icon: CheckCircle, gradient: 'from-emerald-500 to-teal-500' },
     { label: t.totalNurses, value: summary.totalNurses, icon: Users, gradient: 'from-purple-500 to-pink-500' },
+    { label: 'AI Scored', value: summary.aiScoredAssessments, icon: Activity, gradient: 'from-indigo-500 to-blue-500' },
+    { label: 'AI Failed', value: summary.aiFailedAssessments, icon: AlertTriangle, gradient: 'from-rose-500 to-red-500' },
+    { label: 'Voice Assessed', value: summary.totalVoiceAssessments, icon: Mic, gradient: 'from-cyan-500 to-teal-500' },
+    { label: 'Avg AI Score', value: `${summary.avgAIWeightedTotal.toFixed(2)}/5`, icon: BarChart3, gradient: 'from-fuchsia-500 to-violet-500' },
   ] : [];
 
   const quickLinks = [
@@ -75,6 +79,18 @@ function AdminDashboard() {
           </div>
         ))}
       </div>
+
+      {summary && (
+        <div className="card flex items-center justify-between gap-4">
+          <div>
+            <p className="text-sm text-surface-600">ค่าเฉลี่ยความมั่นใจของ AI</p>
+            <p className="text-2xl font-bold text-surface-900 mt-1">{(summary.avgAIConfidence * 100).toFixed(0)}%</p>
+          </div>
+          <div className="text-sm text-surface-500">
+            จากผลประเมิน AI ที่ valid
+          </div>
+        </div>
+      )}
 
       {/* Quick Links */}
       <div>
