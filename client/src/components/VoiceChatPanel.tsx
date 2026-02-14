@@ -155,6 +155,20 @@ export default function VoiceChatPanel({ sessionId, onConversationComplete, disa
     setManualText('');
   }, [manualText, isComplete, handleNurseResponse]);
 
+  const handleCompleteAndAssess = useCallback(async () => {
+    if (isComplete || isLoading) return;
+    stopListening();
+    cancelSpeech();
+    const nurseTurns = history.filter((item) => item.role === 'nurse' && item.text.trim()).length;
+    if (nurseTurns === 0) {
+      setError('กรุณาตอบอย่างน้อย 1 ครั้งก่อนจบการสนทนา');
+      return;
+    }
+    isProcessing.current = true;
+    setIsComplete(true);
+    await onConversationComplete(history);
+  }, [history, isComplete, isLoading, stopListening, cancelSpeech, onConversationComplete]);
+
   if (!isSupported) {
     return (
       <div className="card bg-amber-50 border-amber-200 text-center p-8">
@@ -347,6 +361,16 @@ export default function VoiceChatPanel({ sessionId, onConversationComplete, disa
                     className="btn-primary !px-4 !rounded-xl"
                   >
                     <Send className="w-4 h-4" />
+                  </button>
+                </div>
+
+                <div className="flex justify-center">
+                  <button
+                    onClick={handleCompleteAndAssess}
+                    disabled={isLoading || history.filter((item) => item.role === 'nurse' && item.text.trim()).length === 0}
+                    className="btn-secondary text-sm"
+                  >
+                    จบการสนทนาและประเมินผล
                   </button>
                 </div>
               </div>

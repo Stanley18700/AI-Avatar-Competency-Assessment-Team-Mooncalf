@@ -26,6 +26,18 @@ interface ChatResponse {
 }
 
 const MAX_TURNS = 4; // 4 AI questions total before wrapping up
+const MIN_NURSE_TURNS_FOR_COMPLETION = 3;
+const COMPLETION_PHRASES = [
+  'จบแล้ว',
+  'จบค่ะ',
+  'จบครับ',
+  'ไม่มีเพิ่มเติม',
+  'ครบถ้วนแล้ว',
+  'เสร็จแล้ว',
+  'พอแล้ว',
+  'หมดแล้ว',
+  'เท่านี้',
+];
 const THAI_CHAR_REGEX = /[\u0E00-\u0E7F]/;
 const LATIN_CHAR_REGEX = /[A-Za-z]/;
 
@@ -128,6 +140,27 @@ function buildFallbackChatResponse(caseInfo: CaseInfo, history: ConversationMess
   };
 }
 
+function detectUserCompletionIntent(text: string): boolean {
+  const normalized = text.replace(/\s+/g, '').toLowerCase();
+  return COMPLETION_PHRASES.some((phrase) => normalized.includes(phrase.replace(/\s+/g, '').toLowerCase()));
+}
+
+function shouldFinishConversation(history: ConversationMessage[]): boolean {
+  const aiTurns = history.filter((m) => m.role === 'ai').length;
+  const nurseMessages = history.filter((m) => m.role === 'nurse');
+  const nurseTurns = nurseMessages.length;
+  const latestNurseMessage = nurseMessages[nurseMessages.length - 1]?.text || '';
+
+  if (aiTurns >= MAX_TURNS) return true;
+  if (nurseTurns >= MAX_TURNS + 1) return true;
+
+  if (nurseTurns >= MIN_NURSE_TURNS_FOR_COMPLETION && detectUserCompletionIntent(latestNurseMessage)) {
+    return true;
+  }
+
+  return false;
+}
+
 function normalizeChatResponsePayload(payload: unknown, aiTurns: number): ChatResponse {
   const obj = (payload && typeof payload === 'object') ? payload as Record<string, unknown> : {};
   const rawMessage = obj.message;
@@ -182,6 +215,7 @@ export async function generateChatResponse(
 
   const aiTurns = history.filter(m => m.role === 'ai').length;
   const nurseTurns = history.filter(m => m.role === 'nurse').length;
+  const forceComplete = shouldFinishConversation(history);
 
   const criteriaList = criteria
     .map(c => `- ${c.nameEn} (${c.nameTh})`)
@@ -230,7 +264,7 @@ ${aiTurns === 0
      1. ทักทายพยาบาลอย่างเป็นกันเองและแนะนำตัวสั้นๆ
      2. เกริ่นถึงกรณีศึกษาโดยย่อ (สรุปเฉพาะประเด็นสำคัญ ไม่ต้องอ่านยาว) "คนไข้รายนี้..."
      3. เริ่มต้นด้วย "คำถามปลายเปิด" เพื่อประเมินการประเมินสภาพผู้ป่วย (Assessment) หรือการตัดสินใจแรกรับ`
-      : aiTurns >= MAX_TURNS
+      : forceComplete
         ? `นี่คือ "การปิดบทสนทนา"
      1. กล่าวขอบคุณพยาบาลสำหรับข้อมูล
      2. แจ้งว่าระบบจะทำการประมวลผลผลการประเมินสักครู่
@@ -250,7 +284,7 @@ ${aiTurns === 0
 รูปแบบการตอบกลับ (JSON Response Format):
 {
   "message": "ข้อความภาษาไทยที่ AI จะพูดออกมา (String)",
-  "isComplete": ${aiTurns >= MAX_TURNS ? 'true' : 'false'} (Boolean),
+  "isComplete": ${forceComplete ? 'true' : 'false'} (Boolean),
   "turnNumber": ${aiTurns + 1} (Number)
 }`;
 
@@ -284,6 +318,9 @@ ${aiTurns === 0
       }
 
       const parsed = normalizeChatResponsePayload(JSON.parse(jsonStr), aiTurns);
+      if (forceComplete) {
+        parsed.isComplete = true;
+      }
 
       console.log(`[VoiceChat] Model ${modelName} → turn ${parsed.turnNumber}, complete=${parsed.isComplete}`);
       return parsed;

@@ -422,6 +422,16 @@ router.post('/:id/submit-conversation', requireRole('NURSE'), async (req: AuthRe
     const { id } = req.params;
     const { history } = req.body; // Full conversation history
 
+    const conversationHistory: Array<{ role: 'ai' | 'nurse'; text: string }> = Array.isArray(history) ? history : [];
+    const nurseMessages = conversationHistory
+      .filter((m) => m && m.role === 'nurse' && typeof m.text === 'string' && m.text.trim())
+      .map((m) => m.text.trim());
+
+    if (nurseMessages.length === 0) {
+      res.status(400).json({ error: 'ไม่พบคำตอบของพยาบาลสำหรับการประเมิน' });
+      return;
+    }
+
     const session = await prisma.assessmentSession.findUnique({
       where: { id },
       include: { case: true }
@@ -433,10 +443,14 @@ router.post('/:id/submit-conversation', requireRole('NURSE'), async (req: AuthRe
     }
 
     // Build transcript from conversation
-    const transcriptText = (history || [])
+    const transcriptText = conversationHistory
       .map((m: { role: string; text: string }) =>
         `${m.role === 'ai' ? 'AI Avatar' : 'พยาบาล'}: ${m.text}`
       )
+      .join('\n\n');
+
+    const nurseTranscriptText = nurseMessages
+      .map((text, idx) => `คำตอบพยาบาลครั้งที่ ${idx + 1}: ${text}`)
       .join('\n\n');
 
     // Store transcript
@@ -501,7 +515,7 @@ router.post('/:id/submit-conversation', requireRole('NURSE'), async (req: AuthRe
       const { output, rawResponse, retryCount } = await evaluateWithGemini(
         allCriteria,
         caseInfo,
-        transcriptText
+        nurseTranscriptText
       );
 
       // Store AI scores (same logic as submit endpoint)
