@@ -30,8 +30,18 @@ This project deploys best as:
 ### Option B: Manual Render service
 - Root Directory: `server`
 - Build Command: `npm ci --include=dev && npm run build && npx prisma generate`
-- Start Command: `npm run db:deploy && npm run start`
+- Start Command: `npm run db:push && npm run start`
 - Add the same env vars above.
+
+### First-time data seed (run once)
+After backend is live, open Render service Shell and run:
+
+`npm run db:seed`
+
+Default accounts from seed:
+- `admin@nursemind.ai` / `password123`
+- `nurse1@nursemind.ai` / `password123`
+- `reviewer@nursemind.ai` / `password123`
 
 ## 2) Deploy Frontend on Vercel
 
