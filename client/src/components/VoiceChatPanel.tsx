@@ -240,7 +240,7 @@ export default function VoiceChatPanel({ sessionId, onConversationComplete, disa
         {/* Conversation */}
         {started && (
           <>
-            <div className="max-h-80 overflow-y-auto px-1 py-2 space-y-3 mt-2">
+            <div className="h-80 overflow-y-auto px-1 py-2 space-y-3 mt-2">
               {history.map((msg, idx) => (
                 <div
                   key={idx}
@@ -248,7 +248,7 @@ export default function VoiceChatPanel({ sessionId, onConversationComplete, disa
                   style={{ animationDelay: '50ms' }}
                 >
                   <div
-                    className={`max-w-[80%] rounded-2xl px-4 py-3 text-sm leading-relaxed shadow-sm ${msg.role === 'ai'
+                    className={`max-w-[80%] min-w-0 rounded-2xl px-4 py-3 text-sm leading-relaxed shadow-sm ${msg.role === 'ai'
                       ? 'bg-surface-50 border border-surface-100 text-surface-800 rounded-bl-md'
                       : 'bg-gradient-to-r from-primary-600 to-primary-500 text-white rounded-br-md shadow-glow-sm'
                       }`}
@@ -256,7 +256,7 @@ export default function VoiceChatPanel({ sessionId, onConversationComplete, disa
                     <p className="text-[10px] font-semibold mb-1 opacity-50 uppercase tracking-wider">
                       {msg.role === 'ai' ? '🤖 AI Avatar' : '👩‍⚕️ คุณ'}
                     </p>
-                    <p>{msg.text}</p>
+                    <p className="whitespace-pre-wrap break-words">{msg.text}</p>
                   </div>
                 </div>
               ))}
@@ -264,7 +264,7 @@ export default function VoiceChatPanel({ sessionId, onConversationComplete, disa
               {/* Interim speech text */}
               {voiceState === 'listening' && interimText && (
                 <div className="flex justify-end animate-fade-in">
-                  <div className="max-w-[80%] rounded-2xl px-4 py-3 text-sm bg-primary-50 text-primary-700 rounded-br-md italic border border-primary-100">
+                  <div className="max-w-[80%] min-w-0 rounded-2xl px-4 py-3 text-sm bg-primary-50 text-primary-700 rounded-br-md italic border border-primary-100 whitespace-pre-wrap break-words">
                     {interimText}...
                   </div>
                 </div>
