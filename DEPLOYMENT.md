@@ -55,6 +55,8 @@ Default accounts from seed:
    - `VITE_API_BASE_URL` = `https://<your-render-service>.onrender.com/api`
 7. Deploy.
 
+Note: this repo also includes `vercel.json` rewrite to proxy `/api/*` to Render (`https://nursemind-ai-api.onrender.com/api/*`) to avoid 405 errors when SPA fallback is enabled.
+
 ## 3) Required Environment Variables Summary
 
 ### Backend (Render)
