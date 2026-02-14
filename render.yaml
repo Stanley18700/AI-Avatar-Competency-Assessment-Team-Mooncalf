@@ -7,7 +7,7 @@ services:
     autoDeploy: true
     buildCommand: npm ci && npm run build && npx prisma generate
     startCommand: npm run db:deploy && npm run start
-    healthCheckPath: /api/health
+    healthCheckPath: /health
     envVars:
       - key: NODE_ENV
         value: production
@@ -32,7 +32,7 @@ services:
       - key: ENCRYPTION_IV
         sync: false
 
- databases:
+databases:
   - name: nursemind-ai-db
     plan: free
     databaseName: nursemind_ai

@@ -54,8 +54,21 @@ app.use('/api/idp', idpRoutes);
 app.use('/api/audio', audioRoutes);
 
 // Health check
+app.get('/health', (_req, res) => {
+  res.json({ status: 'ok', timestamp: new Date().toISOString() });
+});
+
 app.get('/api/health', (_req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
+});
+
+app.get('/', (_req, res) => {
+  res.json({
+    service: 'NurseMind AI API',
+    status: 'running',
+    health: '/health',
+    apiHealth: '/api/health',
+  });
 });
 
 // Error handler

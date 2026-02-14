@@ -20,7 +20,9 @@ This project deploys best as:
    - `ENCRYPTION_KEY` (32-byte hex)
    - `ENCRYPTION_IV` (16-byte hex)
 4. Wait for deploy. Confirm health endpoint:
-   - `https://<your-render-service>.onrender.com/api/health`
+   - `https://<your-render-service>.onrender.com/health`
+   - Also works: `https://<your-render-service>.onrender.com/api/health`
+   - Important: replace `<your-render-service>` with your real Render service name.
 
 ### Option B: Manual Render service
 - Root Directory: `server`
@@ -59,7 +61,7 @@ This project deploys best as:
 
 - Open frontend and log in.
 - Confirm API calls succeed (no CORS errors).
-- Confirm `/api/health` is healthy.
+- Confirm `/health` is healthy.
 - Run one assessment flow end-to-end.
 
 ## 5) Notes
