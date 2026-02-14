@@ -29,7 +29,7 @@ This project deploys best as:
 
 ### Option B: Manual Render service
 - Root Directory: `server`
-- Build Command: `npm ci && npm run build && npx prisma generate`
+- Build Command: `npm ci --include=dev && npm run build && npx prisma generate`
 - Start Command: `npm run db:deploy && npm run start`
 - Add the same env vars above.
 

@@ -5,7 +5,7 @@ services:
     rootDir: server
     plan: free
     autoDeploy: true
-    buildCommand: npm ci && npm run build && npx prisma generate
+    buildCommand: npm ci --include=dev && npm run build && npx prisma generate
     startCommand: npm run db:deploy && npm run start
     healthCheckPath: /health
     envVars:
