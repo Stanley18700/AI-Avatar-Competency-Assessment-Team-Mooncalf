@@ -106,7 +106,7 @@ export default function SummaryResultsPage() {
           <thead>
             {/* Row 1: Group headers spanning criteria */}
             <tr className="border-b">
-              <th rowSpan={3} className="py-2 px-2 text-left border-r min-w-[120px] bg-surface-100 sticky left-0 z-10">
+              <th rowSpan={3} className="py-2 px-2 text-left border-r min-w-[120px] bg-surface-100 sticky left-0 z-20">
                 ระดับมาตรฐาน<br/>(Standard Level)
               </th>
               {competencyGroups.map(group => (
@@ -146,7 +146,7 @@ export default function SummaryResultsPage() {
                 <React.Fragment key={`level-group-${level}`}>
                   {/* Level Header */}
                   <tr className="bg-yellow-100 border-b-2 border-yellow-300">
-                    <td className="py-2 px-2 font-bold sticky left-0 z-10 bg-yellow-100">
+                    <td className="py-2 px-2 font-bold sticky left-0 z-20 bg-yellow-100">
                       {levelInfo.th} ({levelInfo.en})
                     </td>
                     {allCriteria.map(c => (
@@ -157,7 +157,7 @@ export default function SummaryResultsPage() {
                   {nurses.length > 0 ? nurses.map((nurse, idx) => (
                     <tr key={`nurse-${level}-${idx}`} className="border-b hover:bg-surface-100 cursor-pointer" 
                       onClick={() => navigate(`/idp/${nurse.sessionId}`)}>
-                      <td className="py-1.5 px-2 sticky left-0 z-10 bg-white text-[10px]">
+                      <td className="py-1.5 px-2 sticky left-0 z-20 bg-white text-[10px]">
                         {nurse.nurseName}
                         <span className="text-surface-400 ml-1">({nurse.department})</span>
                       </td>
@@ -175,7 +175,7 @@ export default function SummaryResultsPage() {
                     </tr>
                   )) : (
                     <tr key={`empty-${level}`}>
-                      <td className="py-2 px-2 text-surface-400 text-center sticky left-0 z-10 bg-white" colSpan={1 + allCriteria.length * 2}>
+                      <td className="py-2 px-2 text-surface-400 text-center sticky left-0 z-20 bg-white" colSpan={1 + allCriteria.length * 2}>
                         ไม่มีข้อมูล
                       </td>
                     </tr>
