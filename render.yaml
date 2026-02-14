@@ -1,0 +1,39 @@
+services:
+  - type: web
+    name: nursemind-ai-api
+    env: node
+    rootDir: server
+    plan: free
+    autoDeploy: true
+    buildCommand: npm ci && npm run build && npx prisma generate
+    startCommand: npm run db:deploy && npm run start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: DATABASE_URL
+        fromDatabase:
+          name: nursemind-ai-db
+          property: connectionString
+      - key: CLIENT_URL
+        sync: false
+      - key: CLIENT_URLS
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: JWT_EXPIRES_IN
+        value: 24h
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: ENCRYPTION_KEY
+        sync: false
+      - key: ENCRYPTION_IV
+        sync: false
+
+ databases:
+  - name: nursemind-ai-db
+    plan: free
+    databaseName: nursemind_ai
+    user: nursemind_ai
