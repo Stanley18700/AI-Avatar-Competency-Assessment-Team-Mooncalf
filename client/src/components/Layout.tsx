@@ -115,16 +115,13 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       {/* Main Content */}
       <div className="flex-1 flex flex-col min-w-0 h-screen">
         {/* Top Bar */}
-        <header className="sticky top-0 z-30 bg-primary-50/90 backdrop-blur-md border-b border-primary-100 px-4 py-3 flex items-center gap-4 lg:px-6">
+        <header className="sticky top-0 z-30 bg-transparent border-0 px-4 py-3 flex items-center justify-between lg:px-6">
           <button
             className="lg:hidden p-1.5 rounded-lg hover:bg-surface-100 transition-colors"
             onClick={() => setSidebarOpen(!sidebarOpen)}
           >
             {sidebarOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
-          <div className="flex-1 min-w-0">
-            <p className="text-sm text-surface-800 font-semibold truncate">{t.hospital}</p>
-          </div>
           <LanguageSelector />
         </header>
 

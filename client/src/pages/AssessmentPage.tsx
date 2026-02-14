@@ -436,6 +436,29 @@ export default function AssessmentPage() {
               </div>
             </div>
           )}
+
+          <div className="card">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <p className="font-semibold text-surface-800">ดูผลวิเคราะห์เรียบร้อยแล้ว</p>
+                <p className="text-sm text-surface-500">เลือกขั้นตอนถัดไปเพื่อดำเนินการต่อ</p>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                <button
+                  onClick={() => navigate('/my-assessments')}
+                  className="btn-secondary"
+                >
+                  กลับไปหน้ารายการประเมิน
+                </button>
+                <button
+                  onClick={() => navigate('/dashboard')}
+                  className="btn-primary"
+                >
+                  ไปที่แดชบอร์ด
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       )}
     </div>
