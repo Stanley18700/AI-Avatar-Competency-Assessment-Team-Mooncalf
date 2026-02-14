@@ -33,7 +33,8 @@ This project deploys best as:
 ## 2) Deploy Frontend on Vercel
 
 1. In Vercel, import this repository.
-2. Set **Root Directory** to `client`.
+2. Preferred: set **Root Directory** to `client`.
+   - Alternative: keep root directory as repository root (supported by `vercel.json` in this repo).
 3. Framework: Vite (auto-detected)
 4. Build Command: `npm run build`
 5. Output Directory: `dist`
