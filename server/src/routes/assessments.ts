@@ -137,19 +137,42 @@ router.post('/:id/self-score', requireRole('NURSE'), async (req: AuthRequest, re
     const { id } = req.params;
     const { scores } = req.body; // [{criteriaId, score}]
 
+    if (!Array.isArray(scores) || scores.length === 0) {
+      res.status(400).json({ error: 'กรุณาระบุคะแนนประเมินตนเอง' });
+      return;
+    }
+
     const session = await prisma.assessmentSession.findUnique({ where: { id } });
     if (!session || session.nurseId !== req.user!.id) {
       res.status(404).json({ error: 'ไม่พบการประเมิน' });
       return;
     }
 
+    let appliedScores = 0;
+
     // Upsert self scores
     for (const s of scores) {
+      if (!s || typeof s.criteriaId !== 'string') {
+        continue;
+      }
+
+      const numericScore = Number(s.score);
+      if (!Number.isFinite(numericScore) || numericScore < 1 || numericScore > 5) {
+        continue;
+      }
+
       await prisma.selfScore.upsert({
         where: { sessionId_criteriaId: { sessionId: id, criteriaId: s.criteriaId } },
-        create: { sessionId: id, criteriaId: s.criteriaId, score: s.score },
-        update: { score: s.score }
+        create: { sessionId: id, criteriaId: s.criteriaId, score: numericScore },
+        update: { score: numericScore }
       });
+
+      appliedScores += 1;
+    }
+
+    if (appliedScores === 0) {
+      res.status(400).json({ error: 'ไม่พบคะแนนที่ถูกต้องสำหรับบันทึก' });
+      return;
     }
 
     await prisma.assessmentSession.update({

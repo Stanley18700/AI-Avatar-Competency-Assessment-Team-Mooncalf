@@ -1,7 +1,13 @@
 import axios from 'axios';
 
+const DIRECT_RENDER_API_URL = 'https://nursemind-ai-api.onrender.com/api';
+
+const resolvedBaseURL =
+  import.meta.env.VITE_API_BASE_URL ||
+  (import.meta.env.PROD ? DIRECT_RENDER_API_URL : '/api');
+
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || '/api',
+  baseURL: resolvedBaseURL,
   headers: { 'Content-Type': 'application/json' }
 });
 
@@ -17,7 +23,19 @@ api.interceptors.request.use((config) => {
 // Handle 401 responses
 api.interceptors.response.use(
   (response) => response,
-  (error) => {
+  async (error) => {
+    const originalRequest = error?.config as any;
+
+    if (
+      error.response?.status === 502 &&
+      originalRequest &&
+      !originalRequest.__retryWithDirectRender
+    ) {
+      originalRequest.__retryWithDirectRender = true;
+      originalRequest.baseURL = DIRECT_RENDER_API_URL;
+      return api.request(originalRequest);
+    }
+
     if (error.response?.status === 401) {
       localStorage.removeItem('token');
       localStorage.removeItem('user');
