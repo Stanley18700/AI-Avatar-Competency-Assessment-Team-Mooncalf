@@ -74,7 +74,8 @@ export async function evaluateWithGemini(
   }
 
   const genAI = new GoogleGenerativeAI(apiKey);
-  const configuredModels = (process.env.GEMINI_MODELS || 'gemini-2.5-flash,gemini-2.0-flash,gemini-pro-latest')
+  // Use gemini-1.5-flash as primary (best speed/cost balance), fallback to 1.5-pro
+  const configuredModels = (process.env.GEMINI_MODELS || 'gemini-1.5-flash,gemini-1.5-pro,gemini-2.0-flash')
     .split(',')
     .map(m => m.trim())
     .filter(Boolean);
