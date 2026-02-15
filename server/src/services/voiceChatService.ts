@@ -208,7 +208,7 @@ export async function generateChatResponse(
   }
 
   const genAI = new GoogleGenerativeAI(apiKey);
-  const configuredModels = (process.env.GEMINI_MODELS || 'gemini-2.5-flash,gemini-2.0-flash,gemini-pro-latest')
+  const configuredModels = (process.env.GEMINI_MODELS || 'gemini-2.5-flash,gemini-2.0-flash,gemini-2.0-flash-lite')
     .split(',')
     .map(m => m.trim())
     .filter(Boolean);
