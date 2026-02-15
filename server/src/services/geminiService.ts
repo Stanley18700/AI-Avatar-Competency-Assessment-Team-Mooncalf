@@ -74,8 +74,8 @@ export async function evaluateWithGemini(
   }
 
   const genAI = new GoogleGenerativeAI(apiKey);
-  // Use gemini-2.5-flash as primary (stable, fast), fallback to 2.0-flash
-  const configuredModels = (process.env.GEMINI_MODELS || 'gemini-2.5-flash,gemini-2.0-flash,gemini-2.5-pro')
+  // Prefer lighter/cheaper models first to reduce quota pressure in free-tier environments
+  const configuredModels = (process.env.GEMINI_MODELS || 'gemini-2.0-flash-lite,gemini-2.0-flash,gemini-2.5-flash')
     .split(',')
     .map(m => m.trim())
     .filter(Boolean);
@@ -95,7 +95,7 @@ export async function evaluateWithGemini(
       generationConfig: {
         temperature: 0.1,
         topP: 0.95,
-        maxOutputTokens: 8192,
+        maxOutputTokens: 2048,
       }
     });
 
