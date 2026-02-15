@@ -381,12 +381,12 @@ export default function VoiceChatPanel({ sessionId, onConversationComplete, disa
 
             {/* Conversation complete */}
             {isComplete && (
-              <div className="mt-5 text-center py-6 bg-gradient-to-br from-emerald-50 to-teal-50 rounded-2xl border border-emerald-100 animate-scale-in">
-                <div className="w-14 h-14 mx-auto mb-3 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center shadow-sm">
+              <div className="mt-5 text-center py-6 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl border border-blue-100 animate-scale-in">
+                <div className="w-14 h-14 mx-auto mb-3 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-500 flex items-center justify-center shadow-sm">
                   <Sparkles className="w-6 h-6 text-white" />
                 </div>
-                <p className="font-semibold text-emerald-700">สนทนาเสร็จสิ้น</p>
-                <p className="text-sm text-emerald-600 mt-1">กำลังประมวลผลคะแนนจากบทสนทนา...</p>
+                <p className="font-semibold text-sky-700">สนทนาเสร็จสิ้น</p>
+                <p className="text-sm text-sky-600 mt-1">กำลังประมวลผลคะแนนจากบทสนทนา...</p>
               </div>
             )}
 

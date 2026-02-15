@@ -33,7 +33,7 @@ export default function AIAvatar({ state, size = 200, className = '' }: AIAvatar
   const r = size * 0.38;
 
   const stateColors: Record<AvatarState, { ring: string; pulse: string; bg: string }> = {
-    idle: { ring: '#14b8a6', pulse: 'rgba(20, 184, 166, 0.25)', bg: '#f0fdfa' }, // Teal
+    idle: { ring: '#0ea5e9', pulse: 'rgba(14, 165, 233, 0.25)', bg: '#f0f9ff' }, // Sky/Medical Blue
     speaking: { ring: '#0ea5e9', pulse: 'rgba(14, 165, 233, 0.25)', bg: '#f0f9ff' }, // Sky
     listening: { ring: '#ef4444', pulse: 'rgba(239, 68, 68, 0.25)', bg: '#fef2f2' }, // Red
     thinking: { ring: '#8b5cf6', pulse: 'rgba(139, 92, 246, 0.25)', bg: '#f5f3ff' }, // Violet

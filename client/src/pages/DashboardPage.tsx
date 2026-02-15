@@ -30,11 +30,11 @@ function AdminDashboard() {
   const stats = summary ? [
     { label: t.totalAssessments, value: summary.totalAssessments, icon: ClipboardCheck, gradient: 'from-blue-500 to-cyan-500' },
     { label: t.completedAssessments, value: summary.completedAssessments, icon: TrendingUp, gradient: 'from-amber-500 to-orange-500' },
-    { label: t.approvedAssessments, value: summary.approvedAssessments, icon: CheckCircle, gradient: 'from-emerald-500 to-teal-500' },
+    { label: t.approvedAssessments, value: summary.approvedAssessments, icon: CheckCircle, gradient: 'from-cyan-500 to-blue-500' },
     { label: t.totalNurses, value: summary.totalNurses, icon: Users, gradient: 'from-purple-500 to-pink-500' },
     { label: 'AI Scored', value: summary.aiScoredAssessments, icon: Activity, gradient: 'from-indigo-500 to-blue-500' },
     { label: 'AI Failed', value: summary.aiFailedAssessments, icon: AlertTriangle, gradient: 'from-rose-500 to-red-500' },
-    { label: 'Voice Assessed', value: summary.totalVoiceAssessments, icon: Mic, gradient: 'from-cyan-500 to-teal-500' },
+    { label: 'Voice Assessed', value: summary.totalVoiceAssessments, icon: Mic, gradient: 'from-sky-500 to-indigo-500' },
     { label: 'Avg AI Score', value: `${summary.avgAIWeightedTotal.toFixed(2)}/5`, icon: BarChart3, gradient: 'from-fuchsia-500 to-violet-500' },
   ] : [];
 
@@ -155,7 +155,7 @@ function NurseDashboard() {
           <p className="text-sm text-surface-600 mt-1 leading-snug">การประเมินทั้งหมด</p>
         </div>
         <div className="card text-center animate-fade-in-up" style={{ animationDelay: '200ms' }}>
-          <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center mx-auto mb-3">
+          <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-sky-500 to-sky-600 flex items-center justify-center mx-auto mb-3">
             <CheckCircle className="w-6 h-6 text-white" />
           </div>
           <p className="text-3xl font-bold text-surface-900 tabular-nums">{approved}</p>
@@ -232,7 +232,7 @@ function ReviewerDashboard() {
         </div>
         {pending.length === 0 ? (
           <div className="text-center py-12 text-surface-400">
-            <CheckCircle className="w-12 h-12 mx-auto mb-3 text-emerald-200" />
+            <CheckCircle className="w-12 h-12 mx-auto mb-3 text-sky-200" />
             <p className="font-medium text-surface-600">{t.noData}</p>
             <p className="text-sm text-surface-500 mt-1 leading-relaxed">ไม่มีรายการรอตรวจสอบ</p>
           </div>

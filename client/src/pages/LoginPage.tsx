@@ -29,7 +29,7 @@ export default function LoginPage() {
 
   const demoAccounts = [
     { label: 'Admin', email: 'admin@nursemind.ai', icon: '👑', color: 'from-amber-500 to-orange-500' },
-    { label: 'Nurse 1', email: 'nurse1@nursemind.ai', icon: '👩‍⚕️', color: 'from-emerald-500 to-teal-500' },
+    { label: 'Nurse 1', email: 'nurse1@nursemind.ai', icon: '👩‍⚕️', color: 'from-sky-500 to-indigo-500' },
     { label: 'Nurse 2', email: 'nurse2@nursemind.ai', icon: '👨‍⚕️', color: 'from-blue-500 to-cyan-500' },
     { label: 'Reviewer', email: 'reviewer@nursemind.ai', icon: '🔍', color: 'from-purple-500 to-pink-500' },
   ];
