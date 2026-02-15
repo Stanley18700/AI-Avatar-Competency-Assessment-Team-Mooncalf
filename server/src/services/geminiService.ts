@@ -74,8 +74,8 @@ export async function evaluateWithGemini(
   }
 
   const genAI = new GoogleGenerativeAI(apiKey);
-  // Prefer lighter/cheaper models first to reduce quota pressure in free-tier environments
-  const configuredModels = (process.env.GEMINI_MODELS || 'gemini-2.0-flash-lite,gemini-2.0-flash,gemini-2.5-flash')
+  // Prefer gemini-2.5-flash first since some keys/projects may have 2.0 free-tier quota set to 0
+  const configuredModels = (process.env.GEMINI_MODELS || 'gemini-2.5-flash,gemini-2.0-flash,gemini-2.0-flash-lite')
     .split(',')
     .map(m => m.trim())
     .filter(Boolean);
