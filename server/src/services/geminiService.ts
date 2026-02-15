@@ -16,6 +16,52 @@ interface CaseInfo {
   reasoningIndicators: string[];
 }
 
+/**
+ * Attempt to repair common JSON issues from LLM output:
+ * - Trailing commas before ] or }
+ * - Truncated responses (try to close open brackets)
+ * - Extra text after JSON
+ */
+function repairJson(str: string): string {
+  // Remove trailing commas before } or ]
+  let fixed = str.replace(/,\s*([}\]])/g, '$1');
+  
+  // Try parsing as-is first
+  try {
+    JSON.parse(fixed);
+    return fixed;
+  } catch {}
+
+  // If truncated, try to close open brackets/braces
+  const opens = (fixed.match(/\[/g) || []).length;
+  const closes = (fixed.match(/\]/g) || []).length;
+  const openBraces = (fixed.match(/\{/g) || []).length;
+  const closeBraces = (fixed.match(/\}/g) || []).length;
+
+  // Trim trailing incomplete entries (e.g. cut-off object in array)
+  // Remove last incomplete object if we have unclosed braces
+  if (openBraces > closeBraces) {
+    // Try removing the last incomplete object entry
+    const lastCompleteObj = fixed.lastIndexOf('}');
+    if (lastCompleteObj > 0) {
+      fixed = fixed.substring(0, lastCompleteObj + 1);
+    }
+  }
+
+  // Close remaining brackets
+  for (let i = 0; i < opens - (fixed.match(/\]/g) || []).length; i++) {
+    fixed += ']';
+  }
+  for (let i = 0; i < (fixed.match(/\{/g) || []).length - (fixed.match(/\}/g) || []).length; i++) {
+    fixed += '}';
+  }
+
+  // Remove trailing commas again after repair
+  fixed = fixed.replace(/,\s*([}\]])/g, '$1');
+
+  return fixed;
+}
+
 export async function evaluateWithGemini(
   criteria: CriteriaInfo[],
   caseInfo: CaseInfo,
@@ -48,7 +94,7 @@ export async function evaluateWithGemini(
       generationConfig: {
         temperature: 0.1,
         topP: 0.95,
-        maxOutputTokens: 4096,
+        maxOutputTokens: 8192,
       }
     });
 
@@ -56,7 +102,7 @@ export async function evaluateWithGemini(
       try {
         const fullPrompt = attempt === 0
           ? prompt
-          : `${prompt}\n\nPREVIOUS ATTEMPT FAILED WITH ERROR: ${lastError}\nPlease fix the output and try again.`;
+          : `${prompt}\n\nPREVIOUS ATTEMPT FAILED WITH ERROR: ${lastError}\nPlease fix the output and try again. Return ONLY the JSON, no other text.`;
 
         const result = await model.generateContent(fullPrompt);
         const responseText = result.response.text();
@@ -78,7 +124,16 @@ export async function evaluateWithGemini(
           }
         }
 
-        const parsed = JSON.parse(jsonStr);
+        // Try direct parse first, then attempt repair
+        let parsed: any;
+        try {
+          parsed = JSON.parse(jsonStr);
+        } catch (parseErr) {
+          console.log('[Gemini] Direct JSON parse failed, attempting repair...');
+          const repaired = repairJson(jsonStr);
+          parsed = JSON.parse(repaired);
+          console.log('[Gemini] JSON repair succeeded');
+        }
         const validated = AIEvaluationOutputSchema.parse(parsed);
 
         console.log(`[Gemini] Successfully parsed and validated. Got ${validated.criteriaScores.length} scores`);

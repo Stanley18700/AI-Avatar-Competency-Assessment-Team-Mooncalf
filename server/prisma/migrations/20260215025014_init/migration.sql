@@ -204,6 +204,17 @@ CREATE TABLE "Report" (
     CONSTRAINT "Report_sessionId_fkey" FOREIGN KEY ("sessionId") REFERENCES "AssessmentSession" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
+-- CreateTable
+CREATE TABLE "IndividualDevelopmentPlan" (
+    "id" TEXT NOT NULL PRIMARY KEY,
+    "sessionId" TEXT NOT NULL,
+    "items" TEXT NOT NULL DEFAULT '[]',
+    "notes" TEXT,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" DATETIME NOT NULL,
+    CONSTRAINT "IndividualDevelopmentPlan_sessionId_fkey" FOREIGN KEY ("sessionId") REFERENCES "AssessmentSession" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
@@ -227,3 +238,6 @@ CREATE UNIQUE INDEX "FinalScore_sessionId_criteriaId_key" ON "FinalScore"("sessi
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Report_sessionId_key" ON "Report"("sessionId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "IndividualDevelopmentPlan_sessionId_key" ON "IndividualDevelopmentPlan"("sessionId");
