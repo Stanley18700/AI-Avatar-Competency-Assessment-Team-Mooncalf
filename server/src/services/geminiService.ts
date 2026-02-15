@@ -68,9 +68,9 @@ export async function evaluateWithGemini(
   transcript: string,
   retryCount: number = 0
 ): Promise<{ output: AIEvaluationOutput; rawResponse: string; retryCount: number }> {
-  const apiKey = process.env.GEMINI_API_KEY;
+  const apiKey = process.env.GEMINI_API_KEY || process.env.GOOGLE_CLOUD_API_KEY;
   if (!apiKey) {
-    throw new Error('GEMINI_API_KEY not configured');
+    throw new Error('GEMINI_API_KEY or GOOGLE_CLOUD_API_KEY not configured');
   }
 
   const genAI = new GoogleGenerativeAI(apiKey);

@@ -66,7 +66,7 @@ app.get('/api/health', (_req, res) => {
 app.get('/health/dependencies', async (_req, res) => {
   const checks = {
     database: false,
-    geminiConfigured: Boolean(process.env.GEMINI_API_KEY),
+    geminiConfigured: Boolean(process.env.GEMINI_API_KEY || process.env.GOOGLE_CLOUD_API_KEY),
     jwtConfigured: Boolean(process.env.JWT_SECRET),
     encryptionConfigured: Boolean(process.env.ENCRYPTION_KEY && process.env.ENCRYPTION_IV),
   };
@@ -89,7 +89,7 @@ app.get('/health/dependencies', async (_req, res) => {
 app.get('/api/health/dependencies', async (_req, res) => {
   const checks = {
     database: false,
-    geminiConfigured: Boolean(process.env.GEMINI_API_KEY),
+    geminiConfigured: Boolean(process.env.GEMINI_API_KEY || process.env.GOOGLE_CLOUD_API_KEY),
     jwtConfigured: Boolean(process.env.JWT_SECRET),
     encryptionConfigured: Boolean(process.env.ENCRYPTION_KEY && process.env.ENCRYPTION_IV),
   };

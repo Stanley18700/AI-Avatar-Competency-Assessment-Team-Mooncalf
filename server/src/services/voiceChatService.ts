@@ -201,9 +201,9 @@ export async function generateChatResponse(
   history: ConversationMessage[],
   experienceLevel: string
 ): Promise<ChatResponse> {
-  const apiKey = process.env.GEMINI_API_KEY;
+  const apiKey = process.env.GEMINI_API_KEY || process.env.GOOGLE_CLOUD_API_KEY;
   if (!apiKey) {
-    console.warn('[VoiceChat] GEMINI_API_KEY missing, using fallback conversation flow');
+    console.warn('[VoiceChat] Gemini key missing, using fallback conversation flow');
     return buildFallbackChatResponse(caseInfo, history);
   }
 
